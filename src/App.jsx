@@ -118,18 +118,22 @@ function App() {
 									</div>)
 
 								if (i == map.length - 1)
-									return (<div className='rounded-full h-14 w-14 -left-2 bg-yellow-300 flex items-center justify-center'>
+									return (<div className='relative rounded-full h-14 w-14 -left-2 bg-yellow-300 flex items-center justify-center'>
 										{row[1] === 2 && <p className='text-4xl'>🐶</p>}
 										{row[1] === 3 && <div className='relative h-6 w-full'>
 											<p className='absolute text-center text-4xl top-1/2 -translate-y-1/2 -translate-x-1/2 left-1/2'>🐶</p>
 											<p className='absolute text-center top-full left-1/2 -translate-y-1/2 -translate-x-1/2'>🥎</p>
 										</div>}
-										{(map[map.length - 1][1] == 3) && <ConfettiExplosion {...{
-											force: 0.4,
-											duration: 2200,
-											particleCount: 30,
-											width: 400,
-										}} colors={["#6CA523", "#986A3F", "FDE047", "#EEEEEE"]} />}
+										{(map[map.length - 1][1] == 3) && 
+										<div className='absolute z-10 w-full h-full flex items-center justify-center'>
+											<ConfettiExplosion {...{
+												force: 0.4,
+												duration: 2200,
+												particleCount: 30,
+												width: 400,
+											}} colors={["#6CA523", "#986A3F", "FDE047", "#EEEEEE"]} />
+										</div>
+										}
 									</div>)
 
 								return (
