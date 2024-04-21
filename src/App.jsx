@@ -1,4 +1,9 @@
 /*
+Practica 3.1 Busqueda en pista tipo espina de pescado
+21/04/2024
+Un agente (Perro) buscará un tesoro (pelota) en una pista formada por una vertebra atravesada por 4 costillas
+El agente inicia en un extremo de la vertebra y buscara el tesoro en cada costilla
+El extremo opuesto de la vertebra representa la meta a donde el agente irá ua vez encuentre el tesoro
 Integrantes
 Arturo Misael Álvarez Gutiérrez 	20550369
 Adrián Corral Quezada				20550363
@@ -8,26 +13,29 @@ Jesús Adán Salazar Campos			20550365
 import { useEffect, useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
 
+//Variables de control
+//Posicion actual
 let currentBone = 0
 let currentPos = 1
-let found = false
-let checkedBones = 0
+let found = false //Encontrado
+let checkedBones = 0 //Huesos revisados
 let pastCheckedBones = 0
-let move = 1
-let tick = 0
+let move = 1 //Movimiento
+let tick = 0 //Contar movimientos 
+//Posicion anterior
 let pastBone = currentBone
 let pastPos = currentPos
-let timer;
+let timer; //Temporizador
 
 function App() {
 
 	const [map, setMap] = useState([...Array(6).fill([0, 0, 0])]);
 	const [start, setStart] = useState(false);
-
+	//Inicializar el mapa
 	useEffect(() => {
 		initializeMap();
 	}, []);
-
+	//Movimiento del perro
 	useEffect(() => {
 		timer = setTimeout(() => {
 			moveDog();
@@ -35,7 +43,7 @@ function App() {
 
 		return () => clearTimeout(timer);
 	}, [map]);
-
+	//Funcion para inicializar el mapa
 	const initializeMap = () => {
 		const bone = Math.round(Math.random() * (4 - 1)) + 1;
 		const left = Math.round(Math.random());
@@ -43,58 +51,65 @@ function App() {
 			const newMap = oldMap.map((row) => [0, 0, 0]);
 
 			console.log(newMap);
-			newMap[bone][left ? 0 : 2] = 1;
-			newMap[0][1] = 2;
+			newMap[bone][left ? 0 : 2] = 1; //Tesoro
+			newMap[0][1] = 2; //Perro
 			console.table(newMap);
 			return newMap;
 		})
 	}
+	//Funcion para mover al perro
 	const moveDog = () => {
-		if (currentBone < 5 && currentBone >= 0) {
-			if (!found) {
+		if (currentBone < 5 && currentBone >= 0) { //Limites del mapa
+			if (!found) { //Si no se ha encontrado
+				//Actualzar posicion
 				pastBone = currentBone
 				pastPos = currentPos
 				pastCheckedBones = checkedBones
+				//Cambiar direccion del movimiento si reviso 4 costillas
 				if (checkedBones == 4) {
 					move = -1
 					tick = 0
 				}
+				//Registrar costillas revisados
 				if (currentPos == 0 || currentPos == 2) {
 					checkedBones++
 				}
+				//Revisar costilla
 				if (currentPos == 1 && currentBone != 0 && tick == 0) {
 					currentPos -= move
 					tick++
-				} else {
+				} else { //Devolverse al centro
 					currentPos = 1
 					tick++
-				}
+				}//Moverse a la siguiente costilla
 				if (currentBone == 0 || tick >= 3) {
 					currentBone += move
 					tick = 0
-				}
+				}//Cuando se encuentra el tesoro
 				if (map[currentBone][currentPos] == 1) {
 					found = true;
 					console.log('Encontrado')
 				}
 				console.log(currentBone, currentPos)
+				//Actualizar mapa
 				map[pastBone][pastPos] = 0
 				map[currentBone][currentPos] = found ? 3 : 2;
 				setMap([...map])
 			}
-			else {
+			else { //Si se encontró el tesoro
 				move = 1
 				pastBone = currentBone
 				pastPos = currentPos
-				if (tick >= 3) {
+				if (tick >= 3) { //Volver al centro
 					currentBone += move
 					tick = 0
-				} else if (currentPos == 1) {
+				} else if (currentPos == 1) { //Avanzar horizontalmente
 					currentBone += move
-				} else {
+				} else { //Volver al centro
 					currentPos = 1
 					tick++
 				}
+				//Actualizar mapa
 				map[pastBone][pastPos] = 0
 				map[currentBone][currentPos] = found ? 3 : 2;
 				setMap([...map])
