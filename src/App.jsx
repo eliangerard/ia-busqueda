@@ -1,5 +1,21 @@
+/*
+Integrantes
+Arturo Misael Álvarez Gutiérrez 	20550369
+Adrián Corral Quezada				20550363
+Elian Ramiro Gerard Ramos			20550362
+Jesús Adán Salazar Campos			20550365
+*/
 import { useEffect, useState } from 'react'
 
+let currentBone = 0
+let currentPos = 1
+let found = false
+let checkedBones = 0
+let pastCheckedBones = 0
+let move = 1
+let tick = 0
+let pastBone = currentBone
+let pastPos = currentPos
 
 function App() {
 
@@ -8,6 +24,12 @@ function App() {
 	useEffect(() => {
 		initializeMap();
 	}, []);
+
+	useEffect(() => {
+		setTimeout(() => {
+			moveDog();
+		}, 2000);
+	}, [map]);
 
 	const initializeMap = () => {
 		const bone = Math.round(Math.random() * (4 - 1)) + 1;
@@ -28,6 +50,59 @@ function App() {
 			
 		}, 2000);
 	}
+	const moveDog = () => {
+		if(currentBone < 5 && currentBone >= 0){
+			if(!found){
+				pastBone = currentBone
+				pastPos = currentPos
+				pastCheckedBones = checkedBones
+				if(checkedBones == 4){
+					move = -1
+					tick = 0
+				}
+				if(currentPos == 0 || currentPos == 2){
+					checkedBones++
+				}
+				if(currentPos == 1 && currentBone != 0 && tick==0){
+					currentPos -=move
+					tick++
+				}else{
+					currentPos = 1
+					tick++
+				}
+				if(currentBone == 0 || tick >=3){
+					currentBone += move
+					tick = 0
+				}
+				if(map[currentBone][currentPos] == 1){
+					found = true
+					console.log('Encontrado')
+				}
+				console.log(currentBone, currentPos)
+				map[pastBone][pastPos] = 0
+				map[currentBone][currentPos] = 2				
+				setMap([...map])
+			}
+			else{
+				    move = 1
+					pastBone = currentBone
+					pastPos = currentPos
+					if(tick >=3){
+						currentBone += move
+						tick = 0
+					}else if(currentPos == 1){
+						currentBone += move
+					}else{
+						currentPos = 1
+						tick++
+					}
+					map[pastBone][pastPos] = 0
+					map[currentBone][currentPos] = 2
+					setMap([...map])
+				}
+			}
+		}
+		
 
 	return (
 		<>
