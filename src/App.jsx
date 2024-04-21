@@ -11,7 +11,6 @@ let currentBone = 0
 let currentPos = 1
 let found = false
 let checkedBones = 0
-let pastCheckedBones = 0
 let move = 1
 let tick = 0
 let pastBone = currentBone
