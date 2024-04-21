@@ -17,16 +17,19 @@ let move = 1
 let tick = 0
 let pastBone = currentBone
 let pastPos = currentPos
+let timer;
 
 function App() {
 
 	const [map, setMap] = useState([...Array(6).fill([0, 0, 0])]);
+	const [start, setStart] = useState(false);
+
 	useEffect(() => {
 		initializeMap();
 	}, []);
 
 	useEffect(() => {
-		const timer = setTimeout(() => {
+		timer = setTimeout(() => {
 			moveDog();
 		}, 1000);
 
@@ -159,8 +162,21 @@ function App() {
 				</div>
 			</div>
 			<div className='flex w-full justify-center mt-4'>
-				<button className='w-48 py-2 px-4 mr-4 bg-zinc-700 rounded-full text-white font-bold'>Reiniciar</button>
-				<button className='w-48 py-2 px-4 bg-lime-500 rounded-full text-white font-bold'>Iniciar</button>
+				<button className='w-48 py-2 px-4 mr-4 bg-zinc-700 rounded-full text-white font-bold'
+					onClick={() => {
+						clearTimeout(timer);
+						currentBone = 0
+						currentPos = 1
+						found = false
+						checkedBones = 0
+						pastCheckedBones = 0
+						move = 1
+						tick = 0
+						pastBone = currentBone
+						pastPos = currentPos
+						initializeMap();
+					}}
+				>Reiniciar</button>
 			</div>
 		</>
 	)
