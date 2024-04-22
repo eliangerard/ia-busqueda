@@ -11,6 +11,7 @@ Elian Ramiro Gerard Ramos			20550362
 Jesús Adán Salazar Campos			20550365
 
 Link github https://github.com/eliangerard/ia-busqueda
+Prueba en vivo https://ia-busqueda.vercel.app/
 */
 import { useEffect, useState } from 'react'
 import ConfettiExplosion from 'react-confetti-explosion'
